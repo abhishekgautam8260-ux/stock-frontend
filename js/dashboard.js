@@ -78,8 +78,9 @@ function checkLibraryAndLoad() {
 
 function loadSeats(libraryId) {
   console.log("🪑 Fetching seats for library:", libraryId);
-
-  fetch(`${HOST_URL}/api/seats/library/${libraryId}`)
+  fetch(`${HOST_URL}/api/seats/library/${libraryId}`, {
+    credentials: "include"
+  })
     .then(res => {
       console.log("📡 Seats API status:", res.status);
       return res.json();
@@ -149,7 +150,9 @@ function renderSeats(seats) {
       alert("Library not loaded. Please refresh.");
       return;
     }
-fetch(`${HOST_URL}/api/dashboards/${CURRENT_LIBRARY_ID}`)
+fetch(`${HOST_URL}/api/dashboards/${CURRENT_LIBRARY_ID}`, {
+  credentials: "include"
+})
   .then(res => res.json())
   .then(data => {
     console.log("📊 Dashboard stats loaded", data);
@@ -184,10 +187,14 @@ console.log(" expiry notification triggered ");
     }
 
     Promise.all([
-      fetch(`${HOST_URL}/api/student/expiring-soon/${CURRENT_LIBRARY_ID}`)
+      fetch(`${HOST_URL}/api/student/expiring-soon/${CURRENT_LIBRARY_ID}`, {
+        credentials: "include"
+      })
         .then(r => r.json()),
 
-      fetch(`${HOST_URL}/api/student/expired/${CURRENT_LIBRARY_ID}`)
+      fetch(`${HOST_URL}/api/student/expired/${CURRENT_LIBRARY_ID}`, {
+        credentials: "include"
+      })
         .then(r => r.json())
     ])
     .then(([expiring, expired]) => {
@@ -401,7 +408,9 @@ const CURRENT_LIBRARY_ID =
 
   currentSeatNumber = seatNumber;
 
-  fetch(`${HOST_URL}/api/student/seat/${seatNumber}/library/${CURRENT_LIBRARY_ID}`)
+    fetch(`${HOST_URL}/api/student/seat/${seatNumber}/library/${CURRENT_LIBRARY_ID}`, {
+      credentials: "include"
+    })
       .then(res => {
         if (res.status === 404) {
           alert("This seat is vacant.");
@@ -445,7 +454,7 @@ const CURRENT_LIBRARY_ID =
      alert("Library not loaded. Please refresh.");
      return;
    }
-    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, { method: "POST" })
+    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, { credentials: "include" }, { method: "POST" })
         .then(() => {
             closeStudentModal();
             refreshUI();
@@ -474,7 +483,7 @@ const CURRENT_LIBRARY_ID =
          seatNumber: parseInt(document.getElementById("detailSeatNumber").value)
     };
 
-    fetch(`${HOST_URL}/api/student/${currentSeatNumber}/library/${CURRENT_LIBRARY_ID}`, {
+    fetch(`${HOST_URL}/api/student/${currentSeatNumber}/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" }, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -506,7 +515,7 @@ const CURRENT_LIBRARY_ID =
    }
 
 
-  fetch(`${HOST_URL}/api/seats/library/${CURRENT_LIBRARY_ID}`)
+  fetch(`${HOST_URL}/api/seats/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" })
     .then(res => res.json())
     .then(seats => {
       const select = document.getElementById("detailSeatNumber");
