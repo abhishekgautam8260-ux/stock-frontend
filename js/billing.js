@@ -1,6 +1,6 @@
 const CURRENT_LIBRARY_ID = Number(localStorage.getItem("LIBRARY_ID"));
 
-const HOST_URL ="http://localhost:8080";
+const HOST_URL ="https://seatmanager-service-128817862922.us-central1.run.app";
 
 const today = new Date();
 const year = today.getFullYear();

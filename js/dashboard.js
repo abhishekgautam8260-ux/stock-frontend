@@ -12,7 +12,7 @@ let CURRENT_LIBRARY_ID =
 
 console.log("✅ dashboard.js loaded");
 
-const HOST_URL ="http://localhost:8080";
+const HOST_URL ="https://seatmanager-service-128817862922.us-central1.run.app";
 
 
 
