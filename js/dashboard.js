@@ -14,6 +14,21 @@ console.log("✅ dashboard.js loaded");
 
 const HOST_URL ="https://seatmanager-service-128817862922.us-central1.run.app";
 
+function getAuthHeaders() {
+  const token = localStorage.getItem("TOKEN");
+
+  if (!token) {
+    alert("Session expired. Please login again.");
+    window.location.href = "/login.html";
+    throw new Error("No token found");
+  }
+
+  return {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
+  };
+}
+
 
 /*********************************
  * WINDOW LOAD (ONLY ONE)
@@ -42,7 +57,7 @@ window.onload = function () {
  *********************************/
 function checkLibraryAndLoad() {
   fetch(`${HOST_URL}/api/libraries/exists`, {
-    credentials: "include"
+    headers: getAuthHeaders()
   })
       .then(res => {
         console.log("📡 ${HOST_URL}/api/libraries/exists status:", res.status);
@@ -77,7 +92,7 @@ function checkLibraryAndLoad() {
 function loadSeats(libraryId) {
   console.log("🪑 Fetching seats for library:", libraryId);
   fetch(`${HOST_URL}/api/seats/library/${libraryId}`, {
-    credentials: "include"
+    headers: getAuthHeaders()
   })
     .then(res => {
       console.log("📡 Seats API status:", res.status);
@@ -148,9 +163,9 @@ function renderSeats(seats) {
       alert("Library not loaded. Please refresh.");
       return;
     }
-fetch(`${HOST_URL}/api/dashboards/${CURRENT_LIBRARY_ID}`, {
-  credentials: "include"
-})
+    fetch(`${HOST_URL}/api/dashboards/${CURRENT_LIBRARY_ID}`, {
+      headers: getAuthHeaders()
+    })    
   .then(res => res.json())
   .then(data => {
     console.log("📊 Dashboard stats loaded", data);
@@ -186,13 +201,13 @@ console.log(" expiry notification triggered ");
 
     Promise.all([
       fetch(`${HOST_URL}/api/student/expiring-soon/${CURRENT_LIBRARY_ID}`, {
-        credentials: "include"
-      })
+        headers: getAuthHeaders()
+      })      
         .then(r => r.json()),
 
-      fetch(`${HOST_URL}/api/student/expired/${CURRENT_LIBRARY_ID}`, {
-        credentials: "include"
-      })
+        fetch(`${HOST_URL}/api/student/expired/${CURRENT_LIBRARY_ID}`, {
+          headers: getAuthHeaders()
+        })        
         .then(r => r.json())
     ])
     .then(([expiring, expired]) => {
@@ -369,12 +384,11 @@ function updateViewAllText() {
 
    console.log("📦 Booking payload:", payload);
 
-   fetch(`${HOST_URL}/api/book`,{
-     method: "POST",
-     credentials: "include", // 🔥 IMPORTANT
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify(payload)
-   })
+   fetch(`${HOST_URL}/api/book`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload)
+    })  
      .then(res => {
        if (!res.ok) throw new Error("Booking failed");
        return res.text();
@@ -407,9 +421,9 @@ const CURRENT_LIBRARY_ID =
 
   currentSeatNumber = seatNumber;
 
-    fetch(`${HOST_URL}/api/student/seat/${seatNumber}/library/${CURRENT_LIBRARY_ID}`, {
-      credentials: "include"
-    })
+  fetch(`${HOST_URL}/api/student/seat/${seatNumber}/library/${CURRENT_LIBRARY_ID}`, {
+    headers: getAuthHeaders()
+      })  
       .then(res => {
         if (res.status === 404) {
           alert("This seat is vacant.");
@@ -453,7 +467,10 @@ const CURRENT_LIBRARY_ID =
      alert("Library not loaded. Please refresh.");
      return;
    }
-    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, { method: "POST", credentials: "include" })
+   fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, {
+    method: "POST",
+    headers: getAuthHeaders()
+        })  
         .then(() => {
             closeStudentModal();
             refreshUI();
@@ -483,11 +500,10 @@ const CURRENT_LIBRARY_ID =
     };
 
     fetch(`${HOST_URL}/api/student/${currentSeatNumber}/library/${CURRENT_LIBRARY_ID}`, {
-        method: "PUT",
-        credentials: "include", // 🔥 IMPORTANT
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    })
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    })    
     .then(res => {
         if (!res.ok) throw new Error("Update failed");
         return res.text();
@@ -515,7 +531,9 @@ const CURRENT_LIBRARY_ID =
    }
 
 
-  fetch(`${HOST_URL}/api/seats/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" })
+   fetch(`${HOST_URL}/api/seats/library/${CURRENT_LIBRARY_ID}`, {
+    headers: getAuthHeaders()
+    })  
     .then(res => res.json())
     .then(seats => {
       const select = document.getElementById("detailSeatNumber");
