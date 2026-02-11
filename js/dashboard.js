@@ -369,8 +369,9 @@ function updateViewAllText() {
 
    console.log("📦 Booking payload:", payload);
 
-   fetch(`${HOST_URL}/api/book`, {credentials: "include"}, {
+   fetch(`${HOST_URL}/api/book`,{
      method: "POST",
+     credentials: "include", // 🔥 IMPORTANT
      headers: { "Content-Type": "application/json" },
      body: JSON.stringify(payload)
    })
