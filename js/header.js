@@ -6,7 +6,7 @@ function toggleProfileMenu() {
 const HOST_URL ="https://seatmanager-service-128817862922.us-central1.run.app";
 
 function logout() {
-  fetch(`${HOST_URL}/api/auth/logout`, { credentials: "include" }, { method: "POST" })
+  fetch(`${HOST_URL}/api/auth/logout`, { method: "POST", credentials: "include"  })
     .then(() => window.location.href = "/login.html");
 }
 

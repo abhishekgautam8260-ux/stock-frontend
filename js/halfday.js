@@ -55,8 +55,9 @@ function saveHalfDayStudent() {
     expiryDate: hdExpiry.value
   };
 
-  fetch(`${HOST_URL}/api/student/halfday` , { credentials: "include" }, {
+  fetch(`${HOST_URL}/api/student/halfday`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   }).then(() => {
@@ -90,8 +91,9 @@ function createHalfDayStudent() {
     halfDaySlot: document.getElementById("hdSlot").value
   };
 
-  fetch(`${HOST_URL}/api/student/create/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" },  {
+  fetch(`${HOST_URL}/api/student/create/library/${CURRENT_LIBRARY_ID}`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   })

@@ -140,8 +140,9 @@ function saveExpense() {
     status: exStatus.value
   };
 
-  fetch(`${HOST_URL}/api/expenses/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" }, {
+  fetch(`${HOST_URL}/api/expenses/library/${CURRENT_LIBRARY_ID}`, {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   }).then(() => {
@@ -218,8 +219,9 @@ function updateExpense() {
     status: editStatus.value
   };
 
-  fetch(`${HOST_URL}/api/billing/expenses/${id}/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" }, {
+  fetch(`${HOST_URL}/api/billing/expenses/${id}/library/${CURRENT_LIBRARY_ID}`, {
     method: "PUT",
+    credentials: "include" ,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   })

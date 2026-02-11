@@ -453,7 +453,7 @@ const CURRENT_LIBRARY_ID =
      alert("Library not loaded. Please refresh.");
      return;
    }
-    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, { credentials: "include" }, { method: "POST" })
+    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${currentSeatNumber}`, { method: "POST", credentials: "include" })
         .then(() => {
             closeStudentModal();
             refreshUI();
@@ -482,8 +482,9 @@ const CURRENT_LIBRARY_ID =
          seatNumber: parseInt(document.getElementById("detailSeatNumber").value)
     };
 
-    fetch(`${HOST_URL}/api/student/${currentSeatNumber}/library/${CURRENT_LIBRARY_ID}`, { credentials: "include" }, {
+    fetch(`${HOST_URL}/api/student/${currentSeatNumber}/library/${CURRENT_LIBRARY_ID}`, {
         method: "PUT",
+        credentials: "include", // 🔥 IMPORTANT
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     })

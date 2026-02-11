@@ -71,7 +71,7 @@ const CURRENT_LIBRARY_ID =
      alert("Library not loaded. Please refresh.");
      return;
    }
-    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${seatNumber}`, { method: "POST" } , { credentials: "include" })
+    fetch(`${HOST_URL}/api/vacate/libraryId/${CURRENT_LIBRARY_ID}/seatId/${seatNumber}`, { method: "POST", credentials: "include" })
         .then(() => location.reload());
 }
 
@@ -110,8 +110,9 @@ function saveStudent() {
     endDate: document.getElementById("editEndDate").value + "T00:00:00"
   };
 
-  fetch(`${HOST_URL}/api/students/${id}`, { credentials: "include" }, {
+  fetch(`${HOST_URL}/api/students/${id}`, {
     method: "PUT",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   })
