@@ -594,6 +594,10 @@ function closeStudentModal() {
     document.getElementById("studentModal").style.display = "none";
 }
 
+
+function closeModal() {
+  document.getElementById("bookingModal").style.display = "none";
+}
 function toggleViewAll() {
   showAllAlerts = !showAllAlerts;
   renderExpiryList(allAlerts);
