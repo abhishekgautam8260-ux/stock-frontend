@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Stock Control</title>
+<style>
+
+body{
+    font-family:sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+
+.card{
+    background:#1b1b1b;
+    padding:40px;
+    border-radius:20px;
+    width:400px;
+    margin:auto;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:15px 0;
+    border-radius:10px;
+    border:none;
+    font-size:18px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:12px;
+    background:#00b386;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00d39d;
+}
+
+.price{
+    font-size:40px;
+    margin:20px 0;
+    color:#00ffa3;
+}
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<h2 id="stockName">Stock</h2>
+
+<div class="price" id="currentPrice">₹0</div>
+
+<input id="priceInput" placeholder="Enter new price">
+
+<button onclick="updatePrice()">Update Price</button>
+
+</div>
+
+<script>
+
+const stock =
+JSON.parse(localStorage.getItem("selectedStock"));
+
+document.getElementById("stockName").innerText =
+stock.name;
+
+async function loadPrice(){
+
+    const res = await fetch(
+        `http://localhost:8080/api/stock/${stock.name}`
+    );
+
+    const price = await res.json();
+
+    document.getElementById("currentPrice")
+        .innerText = "₹"+price;
+}
+
+loadPrice();
+
+async function updatePrice(){
+
+    const price =
+        document.getElementById("priceInput").value;
+
+    if(!price) return alert("Enter price");
+
+    await fetch(
+        `http://localhost:8080/api/admin/stock?symbol=${stock.name}&price=${price}`,
+        {method:"POST"}
+    );
+
+    document.getElementById("priceInput").value="";
+    loadPrice();
+}
+
+</script>
+</body>
+</html>

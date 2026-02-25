@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sign Up | SeatManager</title>
-    <link rel="stylesheet" href="css/signup.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Graph</title>
+<link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
+    <div class="auth-card">
+        <h2>Create Account</h2>
 
-<div class="page">
-    <div class="card">
-        <h2>Sign Up</h2>
-
-        <input id="library" placeholder="Library Name">
-        <input id="name" placeholder="Admin Name">
-        <input id="email" placeholder="Email">
-        <input id="phone" placeholder="Phone Number">
+        <input id="name" placeholder="Name">
+        <input id="phone" placeholder="Phone">
         <input id="password" type="password" placeholder="Password">
-        <input id="confirm" type="password" placeholder="Confirm Password">
-
-        <label class="terms">
-            <input type="checkbox">
-            I agree to the <span>Terms & Privacy</span>
-        </label>
-
-        <button onclick="signup()">Create Account</button>
-
-        <p class="switch">
-            Already have an account?
-            <a href="/newlogin.html">Log In</a>
-        </p>
+        <button onclick="signup()">Signup</button>
+        <p>Already user? <a href="login.html">Login</a></p>
     </div>
-</div>
 
-<script src="js/signup.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>

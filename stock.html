@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Graph</title>
+<link rel="stylesheet" href="css/stock.css">
+<!-- <link rel="stylesheet" href="css/style.css"> -->
+</head>
+<body>
+     <!-- HEADER -->
+    <header class="header">
+
+        <!-- LEFT -->
+        <div class="header-left">
+
+            <div class="logo-circle" onclick="goToHome()"></div>
+
+            <div class="menu">
+                <span class="menu-active">Stocks</span>
+                <span>F&O</span>
+                <span>Mutual Funds</span>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="header-right">
+            <div class="wallet-box">
+                ₹ <span id="walletAmount" onclick="goToWallet()">0</span>
+            </div>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input placeholder="Search Groww...">
+                <span class="shortcut">⌘K</span>
+            </div>
+
+            <div class="bell">🔔</div>
+
+            <div class="profile" onclick="toggleProfile()">A</div>
+
+        </div>
+
+    </header>
+
+    <div class="main-layout">
+
+        <!-- LEFT STOCK AREA -->
+        <div class="stock-area">
+    
+            <div class="stock-header">
+                <h2>Newgen Software Technologies</h2>
+    
+                <div class="stock-price">
+                    <span id ="stockPrice" class="price">₹556.90</span>
+                    <span id="profitLoss" class="profit">+1.25 (2.15%)</span>
+                    <span class="loss">-66.00 (10.60%)</span>
+                    <span class="day">1D</span>
+                </div>
+            </div>
+    
+            <canvas id="stockChart"></canvas>
+    
+            <!-- BOTTOM CONTROLS -->
+            <div class="bottom-controls">
+    
+                <div class="exchange">NSE</div>
+    
+                <div class="range-buttons">
+                    <button class="active">1D</button>
+                    <button>1W</button>
+                    <button>1M</button>
+                    <button>3M</button>
+                    <button>6M</button>
+                    <button>1Y</button>
+                    <button>3Y</button>
+                    <button>5Y</button>
+                    <button>All</button>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+        <!-- RIGHT TRADE PANEL -->
+        <div class="trade-card">
+    
+            <h3>Newgen Software Tech</h3>
+    
+            <!-- BUY SELL TAB -->
+            <div class="trade-tabs">
+                <button class="tab active">BUY</button>
+                <button class="tab">SELL</button>
+            </div>
+    
+            <!-- ORDER TYPE -->
+            <div class="order-type">
+                <button class="pill active">Delivery</button>
+                <button class="pill">Intraday</button>
+                <button class="pill">MTF 2.90x</button>
+            </div>
+    
+            <!-- INPUTS -->
+            <div class="input-group">
+                <label>Qty</label>
+                <input id="qtyInput" type="number" placeholder="0">
+            </div>
+    
+            <div class="input-group">
+                <label>Price Limit</label>
+                <input id="priceInput" type="number" placeholder="581.95">
+            </div>
+    
+            <!-- BALANCE -->
+            <div class="balance-row">
+                <span id="balanceText">Buy Amount: ₹0</span>
+                <span id="reqText">Approx req: ₹0</span>
+            </div>
+    
+            <!-- BUY BUTTON -->
+            <button id="tradeBtn" class="buy-big">Buy</button>
+    
+        </div>
+    
+    </div>
+
+<script src="js/stock.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

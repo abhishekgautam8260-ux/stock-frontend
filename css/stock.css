@@ -1,0 +1,349 @@
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Inter, system-ui, Arial;
+    -webkit-tap-highlight-color: transparent;
+    }
+    
+    body{
+    background:#f6f7fb;
+    color:#111;
+    }
+    
+    /* ================= HEADER ================= */
+    
+    .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 16px;
+    background:white;
+    border-bottom:1px solid #eee;
+    position:sticky;
+    top:0;
+    z-index:100;
+    }
+    
+    .header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    }
+    
+    .logo-circle{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#6a6dfd,#00d09c);
+    }
+    
+    /* MENU (Hidden Mobile) */
+    .menu{
+    display:none;
+    }
+    
+    .menu span{
+    font-size:14px;
+    color:#666;
+    cursor:pointer;
+    }
+    
+    .menu-active{
+    color:#111;
+    font-weight:600;
+    }
+    
+    /* RIGHT */
+    .header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    }
+    
+    .wallet-box{
+    background:#e8faf3;
+    padding:6px 12px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    color:#00b386;
+    }
+    
+    .search-icon-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#f1f3f6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    }
+    
+    .profile{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#ff5a1f;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    }
+    
+    /* ================= MAIN LAYOUT ================= */
+    
+    .main-layout{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    padding:16px;
+    }
+    
+    /* ================= STOCK CARD ================= */
+    
+    .stock-area{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+    }
+    
+    .stock-header{
+    margin-bottom:15px;
+    }
+    
+    .stock-header h2{
+    font-size:20px;
+    margin-bottom:6px;
+    }
+    
+    /* PRICE ROW */
+    
+    .stock-price{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    font-size:14px;
+    }
+    
+    .price{
+    font-size:24px;
+    font-weight:700;
+    }
+    
+    .profit{color:#00b386;font-weight:600;}
+    .loss{color:#ff4d4f;font-weight:600;}
+    .day{color:#888;}
+    
+    /* CHART */
+    
+    #stockChart{
+    width:100%;
+    height:260px;
+    }
+    
+    /* ================= BOTTOM CONTROLS ================= */
+    
+    .bottom-controls{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:18px;
+    }
+    
+    .exchange{
+    background:#f1f3f6;
+    padding:8px 16px;
+    border-radius:20px;
+    font-weight:600;
+    width:fit-content;
+    }
+    
+    .range-buttons{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    }
+    
+    .range-buttons::-webkit-scrollbar{
+    display:none;
+    }
+    
+    .range-buttons button{
+    padding:8px 14px;
+    border-radius:20px;
+    border:none;
+    background:#f1f3f6;
+    cursor:pointer;
+    white-space:nowrap;
+    }
+    
+    .range-buttons .active{
+    background:white;
+    border:2px solid #333;
+    }
+    
+    /* ================= TRADE CARD ================= */
+    
+    .trade-card{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+    }
+    
+    .trade-card h3{
+    font-size:18px;
+    margin-bottom:10px;
+    }
+    
+    /* BUY SELL TABS */
+    
+    .trade-tabs{
+    display:flex;
+    background:#f1f3f6;
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:16px;
+    }
+    
+    .tab{
+    flex:1;
+    padding:12px;
+    border:none;
+    background:transparent;
+    font-weight:700;
+    cursor:pointer;
+    border-radius:10px;
+    }
+    
+    .tab.active{
+    background:white;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    }
+    
+    /* ORDER TYPE */
+    
+    .order-type{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+    }
+    
+    .pill{
+    border:none;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#f1f3f6;
+    cursor:pointer;
+    }
+    
+    .pill.active{
+    background:white;
+    box-shadow:0 1px 4px rgba(0,0,0,.1);
+    }
+    
+    /* INPUT */
+    
+    .input-group{
+    margin-bottom:15px;
+    }
+    
+    .input-group label{
+    font-size:13px;
+    color:#666;
+    }
+    
+    .input-group input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:15px;
+    }
+    
+    /* BALANCE */
+    
+    .balance-row{
+    display:flex;
+    justify-content:space-between;
+    margin:18px 0;
+    font-size:14px;
+    color:#666;
+    }
+    
+    /* BUY BUTTON */
+    
+    .buy-big{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg,#00b386,#00d09c);
+    color:white;
+    border:none;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,179,134,.25);
+    transition:.2s;
+    }
+    
+    .buy-big:active{
+    transform:scale(.96);
+    box-shadow:none;
+    }
+    
+    /* ================= DESKTOP ================= */
+    
+    @media(min-width:900px){
+    
+    .menu{
+    display:flex;
+    gap:18px;
+    }
+    
+    .search-icon-btn{
+    display:none;
+    }
+    
+    .search-box{
+    display:flex;
+    align-items:center;
+    background:#f1f3f6;
+    padding:8px 14px;
+    border-radius:12px;
+    width:300px;
+    }
+    
+    .search-box input{
+    border:none;
+    background:transparent;
+    outline:none;
+    flex:1;
+    margin-left:8px;
+    }
+    
+    .main-layout{
+    display:grid;
+    grid-template-columns:2.5fr 1fr;
+    gap:30px;
+    padding:30px;
+    }
+    
+    #stockChart{
+    height:420px;
+    }
+    
+    .bottom-controls{
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    }
+    
+    }

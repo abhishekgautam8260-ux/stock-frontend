@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wallet</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* CARD */
+        .card {
+            width: 380px;
+            backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow:
+                0 0 40px rgba(0, 0, 0, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* TITLE */
+        .title {
+            font-size: 26px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* BALANCE */
+        .balance {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0 30px;
+            background: linear-gradient(90deg, #00ffa3, #00d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* BUTTON */
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        /* ADD */
+        .add {
+            background: linear-gradient(45deg, #00ffa3, #00c9ff);
+            color: black;
+        }
+
+        .add:hover {
+            transform: scale(1.03);
+        }
+
+        /* WITHDRAW */
+        .withdraw {
+            background: linear-gradient(45deg, #ff4d4f, #ff7a45);
+            color: white;
+        }
+
+        .withdraw:hover {
+            transform: scale(1.03);
+        }
+
+        /* SMALL INFO */
+        .note {
+            font-size: 13px;
+            opacity: .6;
+            margin-top: 20px;
+        }
+
+
+        /* HEADER */
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 40px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 5px 20px rgba(0,0,0,0.25);
+    z-index:1000;
+}
+
+/* LEFT */
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+/* LOGO */
+.logo-circle{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background: linear-gradient(45deg,#00ffa3,#00d9ff);
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(0,255,163,0.6);
+}
+
+/* MENU */
+.menu span{
+    margin-right:20px;
+    font-size:15px;
+    cursor:pointer;
+    opacity:.7;
+    transition:.3s;
+}
+
+.menu span:hover{
+    opacity:1;
+}
+
+.menu-active{
+    opacity:1 !important;
+    font-weight:600;
+    background:linear-gradient(90deg,#00ffa3,#00d9ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* RIGHT */
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+/* WALLET */
+.wallet-box{
+    padding:8px 18px;
+    border-radius:30px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.15);
+    transition:.3s;
+}
+
+.wallet-box:hover{
+    transform:scale(1.05);
+}
+
+/* SEARCH */
+.search-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 15px;
+    border-radius:30px;
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.search-box input{
+    background:transparent;
+    border:none;
+    outline:none;
+    color:white;
+    width:160px;
+}
+
+.search-box input::placeholder{
+    color:rgba(255,255,255,0.6);
+}
+
+.shortcut{
+    font-size:12px;
+    opacity:.5;
+}
+
+/* ICONS */
+.bell,
+.profile{
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background: rgba(255,255,255,0.08);
+    cursor:pointer;
+    transition:.3s;
+}
+
+.bell:hover,
+.profile:hover{
+    transform:scale(1.1);
+}
+
+.profile{
+    font-weight:bold;
+    background:linear-gradient(45deg,#00ffa3,#00d9ff);
+    color:black;
+}
+    </style>
+</head>
+
+<body>
+     <!-- HEADER -->
+     <header class="header">
+
+        <!-- LEFT -->
+        <div class="header-left">
+
+            <div class="logo-circle" onclick="goToHome()"></div>
+
+            <div class="menu">
+                <span class="menu-active">Stocks</span>
+                <span>F&O</span>
+                <span>Mutual Funds</span>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="header-right">
+            <div class="wallet-box">
+                ₹ <span id="walletAmount" onclick="goToWallet()">0</span>
+            </div>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input placeholder="Search Groww...">
+                <span class="shortcut">⌘K</span>
+            </div>
+
+            <div class="bell">🔔</div>
+
+            <div class="profile" onclick="toggleProfile()">A</div>
+
+        </div>
+
+    </header>
+
+    <div class="card">
+
+        <div class="title">💰 Wallet Balance</div>
+
+        <div id="balance" class="balance">₹ 0</div>
+
+        <button class="btn add" onclick="location.href='add-balance.html'">
+            ➕ Add Balance
+        </button>
+
+        <button class="btn withdraw" onclick="withdrawMoney()">
+            ➖ Withdraw Balance
+        </button>
+
+        <div class="note">
+            Secure • Encrypted • Real-time Updated
+        </div>
+    </div>
+</body>
+</html>

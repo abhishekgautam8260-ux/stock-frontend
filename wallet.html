@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wallet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/wallet.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+
+        <!-- LEFT -->
+        <div class="header-left">
+
+            <div class="logo-circle" onclick="goToHome()"></div>
+
+            <div class="menu">
+                <span class="menu-active" onclick="goToHome()">Stocks</span>
+                <span>F&O</span>
+                <span>Mutual Funds</span>
+            </div>
+        </div>
+        <!-- RIGHT -->
+        <div class="header-right">
+            <div class="wallet-box">
+                ₹ <span id="walletAmount" onclick="goToWallet()">0</span>
+            </div>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input placeholder="Search Groww...">
+                <span class="shortcut">⌘K</span>
+            </div>
+
+            <div class="bell">🔔</div>
+
+            <div class="profile" onclick="toggleProfile()">A</div>
+
+        </div>
+
+    </header>
+
+    <div class="card">
+
+        <div class="title">💰 Wallet Balance</div>
+
+        <button class="btn add" onclick="location.href='add-balance.html'">
+            ➕ Add Balance
+        </button>
+
+        <button class="btn withdraw" onclick="withdrawMoney()">
+            ➖ Withdraw Balance
+        </button>
+
+        <div class="note">
+            Secure • Encrypted • Real-time Updated
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <span>📊</span>
+        <span>📈</span>
+        <span>💰</span>
+        <span>👤</span>
+    </div>
+    <script src="js/balance.js"></script>
+</body>
+
+</html>
