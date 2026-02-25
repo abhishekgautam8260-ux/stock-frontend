@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groww Auth</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <img src="images/grow.png">
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h2>Simple, Free<br>Investing.</h2>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <div class="tabs">
+            <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+            <button id="signupTab" onclick="showSignup()">Signup</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="loginForm">
+            <input class="input" id="loginPhone" placeholder="Phone">
+            <input class="input" type="password" id="loginPassword" placeholder="Password">
+            <button class="submit" onclick="login()">Login</button>
+        </div>
+
+        <!-- SIGNUP -->
+        <div id="signupForm" class="hidden">
+            <input class="input" id="signupName" placeholder="Name">
+            <input class="input" id="signupPhone" placeholder="Phone">
+            <input class="input" type="password" id="signupPassword" placeholder="Password">
+            <button class="submit" onclick="signup()">Create Account</button>
+        </div>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+</html>
