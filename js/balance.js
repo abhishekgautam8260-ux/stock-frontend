@@ -1,3 +1,5 @@
+const API = "https://stock-backend-production-f4d5.up.railway.app";
+
 async function submitDeposit(){
 
     const amount = Number(document.getElementById("amount").value);
@@ -12,8 +14,8 @@ async function submitDeposit(){
 
     try{
 
-        const res = await fetch(
-            "http://localhost:8080/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
                 method:"POST",
                 headers:{
@@ -44,7 +46,7 @@ async function loadWallet(){
 
     const token = localStorage.getItem("token");
     try {
-        const res = await fetch("http://localhost:8080/api/user", {
+        const res = await fetch(API + "/api/user", {
             headers: {
                 "Authorization": "Bearer " + token
             }
@@ -93,8 +95,8 @@ async function withdrawMoney(){
 
     try{
 
-        const res = await fetch(
-            "http://localhost:8080/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
                 method:"POST",
                 headers:{

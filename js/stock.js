@@ -1,5 +1,6 @@
 const stockData = JSON.parse(localStorage.getItem("selectedStock"));
 const startPrice = stockData ? Number(stockData.price) : 100;
+const API = "https://stock-backend-production-f4d5.up.railway.app";
 
 let prices = [];
 let current = startPrice;
@@ -11,7 +12,7 @@ async function refreshUser() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:8080/api/user", {
+    const res = await fetch(API+"/api/user", {
         headers: { "Authorization": "Bearer " + token }
     });
 
@@ -243,8 +244,8 @@ async function executeBuy() {
 
     try {
 
-        const res = await fetch(
-            "http://localhost:8080/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
                 method:"POST",
                 headers:{
@@ -283,8 +284,8 @@ async function executeSell(){
 
     try{
 
-        const res = await fetch(
-            "http://localhost:8080/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
                 method:"POST",
                 headers:{

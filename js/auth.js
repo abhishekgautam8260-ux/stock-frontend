@@ -1,4 +1,4 @@
-const API = "http://localhost:8080/api/auth";
+const API = "https://stock-backend-production-f4d5.up.railway.app";
 
 async function signup() {
 

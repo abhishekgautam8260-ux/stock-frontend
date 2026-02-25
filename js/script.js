@@ -1,5 +1,7 @@
 const token = localStorage.getItem("token");
 
+const API = "https://stock-backend-production-f4d5.up.railway.app";
+
 document.addEventListener("DOMContentLoaded", initApp);
 function initApp(){
     console.log("Initializing app...");
@@ -44,7 +46,7 @@ async function loadUser() {
     console.log("Loading user with token:", token);
 
     try {
-        const res = await fetch("http://localhost:8080/api/user", {
+        const res = await fetch(API + "/api/user", {
             headers: {
                 "Authorization": "Bearer " + token
             }
