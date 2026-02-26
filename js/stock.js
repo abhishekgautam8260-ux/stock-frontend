@@ -1,5 +1,7 @@
-const stockData = JSON.parse(localStorage.getItem("selectedStock"));
-const startPrice = stockData ? Number(stockData.price) : 100;
+const raw = localStorage.getItem("selectedStock");
+const stockData = raw ? JSON.parse(raw) : null;
+
+const startPrice = stockData?.price ? Number(stockData.price) : 500;
 const API = "https://efficient-simplicity-production-0081.up.railway.app";
 
 let prices = [];
@@ -44,7 +46,7 @@ for (let i = 0; i < 120; i++) {
 
 /* ================= STOCK UI ================= */
 
-if (stockData) {
+if (stockData && stockData.name) {
     document.querySelector(".stock-header h2").innerText = stockData.name;
     document.getElementById("stockPrice").innerText = "₹ " + startPrice;
     document.querySelector(".trade-card h3").innerText = stockData.name;
@@ -55,8 +57,13 @@ if (stockData) {
 const canvas = document.getElementById("stockChart");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 900;
-canvas.height = 400;
+function resizeCanvas(){
+    canvas.width = canvas.offsetWidth;
+    canvas.height = window.innerWidth < 600 ? 260 : 400;
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 /* ================= CONFIG ================= */
 
