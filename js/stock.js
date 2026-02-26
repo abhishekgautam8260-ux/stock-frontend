@@ -42,6 +42,7 @@ function formatMoney(value){
         .toFixed(1)        // keeps 1 decimal
         .replace(/\.0$/,''); // removes .0 if integer
 }
+}
 
 refreshUser();
 
