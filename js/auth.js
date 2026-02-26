@@ -15,7 +15,7 @@ async function signup() {
         password: password
     };
 
-    const res = await fetch(API + "/signup", {
+    const res = await fetch(API + "/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -41,7 +41,7 @@ async function login() {
     const phone = document.getElementById("loginPhone").value;
     const password = document.getElementById("loginPassword").value;
 
-    const res = await fetch(API + "/login", {
+    const res = await fetch(API + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
