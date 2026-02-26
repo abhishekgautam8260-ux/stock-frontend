@@ -337,4 +337,17 @@ async function executeSell(){
 
 /* ================= START ================= */
 
+function goToHome() {
+    window.location.href = "newindex.html";
+}
+function toggleProfile() {
+    document.getElementById("profilePanel")
+        .classList.toggle("show");
+}
+
+function goToWallet() {
+    window.location.href = "wallet.html";
+}
+
+
 drawGraph();
