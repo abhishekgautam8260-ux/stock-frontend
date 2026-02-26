@@ -3,6 +3,7 @@ const API = "https://stock-backend-production-f4d5.up.railway.app";
 async function signup() {
 
 
+    console.log("Calling API:", API + "/signup");
     const name = document.getElementById("signupName").value;
     const phone = document.getElementById("signupPhone").value;
     const password = document.getElementById("signupPassword").value;
