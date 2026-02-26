@@ -1,6 +1,6 @@
 const token = localStorage.getItem("token");
 
-const API = "https://efficient-simplicity-production-0081.up.railway.app/";
+const API = "https://efficient-simplicity-production-0081.up.railway.app";
 
 document.addEventListener("DOMContentLoaded", initApp);
 function initApp(){
