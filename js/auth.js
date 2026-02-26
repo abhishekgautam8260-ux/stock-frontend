@@ -1,4 +1,4 @@
-const API = "https://stock-backend-production-f4d5.up.railway.app";
+const API = "https://efficient-simplicity-production-0081.up.railway.app/";
 
 async function signup() {
 

@@ -1,6 +1,6 @@
 const stockData = JSON.parse(localStorage.getItem("selectedStock"));
 const startPrice = stockData ? Number(stockData.price) : 100;
-const API = "https://stock-backend-production-f4d5.up.railway.app";
+const API = "https://efficient-simplicity-production-0081.up.railway.app/";
 
 let prices = [];
 let current = startPrice;
