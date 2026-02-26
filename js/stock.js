@@ -27,9 +27,17 @@ async function refreshUser() {
 
     const walletEl = document.getElementById("walletAmount");
     if (walletEl)
-        walletEl.innerText = user.walletBalance ?? 0;
+        walletEl.innerText = formatMoney(user.walletBalance ?? 0);
 
     return user;
+}
+
+function formatMoney(value){
+    if(value == null) return "0";
+
+    return Number(value)
+        .toFixed(1)        // keeps 1 decimal
+        .replace(/\.0$/,''); // removes .0 if integer
 }
 
 refreshUser();

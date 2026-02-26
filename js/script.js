@@ -72,7 +72,7 @@ async function loadUser() {
         if (walletEl) {
 
             console.log(walletEl);
-            walletEl.innerText = user.walletBalance ?? 0;
+            walletEl.innerText = formatMoney(user.walletBalance ?? 0);
         }
         else{
             console.warn("Wallet element not found");
@@ -83,6 +83,14 @@ async function loadUser() {
         localStorage.removeItem("token");
         window.location.href = "login.html";
     }
+}
+
+function formatMoney(value){
+    if(value == null) return "0";
+
+    return Number(value)
+        .toFixed(1)        // keeps 1 decimal
+        .replace(/\.0$/,''); // removes .0 if integer
 }
 
 
