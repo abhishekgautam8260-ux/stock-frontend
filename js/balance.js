@@ -70,10 +70,13 @@ async function loadWallet(){
         /* WALLET */
         const walletEl = document.getElementById("walletAmount");
         if (walletEl) {
+                    const rawBalance = Number(user.walletBalance ?? 0);
 
-            console.log(walletEl);
-            walletEl.innerText = formatMoney(user.walletBalance ?? 0);
-        }
+                    walletEl.innerText = rawBalance.toLocaleString("en-IN", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 1
+                    });
+                }
         else{
             console.warn("Wallet element not found");
         }

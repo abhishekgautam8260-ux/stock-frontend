@@ -131,7 +131,7 @@ function logout() {
     // 🧹 Remove token
     localStorage.removeItem("token");
     // 🔄 Redirect
-    window.location.href = "/login.html";
+    window.location.href = "/index.html";
 }
 
 

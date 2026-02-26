@@ -26,11 +26,14 @@ async function refreshUser() {
         profile.innerText = user.name.charAt(0).toUpperCase();
 
     const walletEl = document.getElementById("walletAmount");
-    if (walletEl)
-        walletEl.innerText = formatMoney(user.walletBalance ?? 0);
+    if (walletEl) {
+            const rawBalance = Number(user.walletBalance ?? 0);
 
-    return user;
-}
+            walletEl.innerText = rawBalance.toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 1
+            });
+        }
 
 function formatMoney(value){
     if(value == null) return "0";
