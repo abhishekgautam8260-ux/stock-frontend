@@ -1,4 +1,4 @@
-const API = "https://efficient-simplicity-production-0081.up.railway.app";
+const API = "https://proactive-essence-production.up.railway.app";
 
 async function submitDeposit(){
 
