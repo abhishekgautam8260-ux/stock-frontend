@@ -2,7 +2,7 @@ const raw = localStorage.getItem("selectedStock");
 const stockData = raw ? JSON.parse(raw) : null;
 
 const startPrice = stockData?.price ? Number(stockData.price) : 500;
-const API = "https://efficient-simplicity-production-0081.up.railway.app";
+const API = "https://proactive-essence-production.up.railway.app";
 
 let prices = [];
 let current = startPrice;
