@@ -1,6 +1,6 @@
 const token = localStorage.getItem("token");
 
-const API = "https://proactive-essence-production.up.railway.app";
+const API = "https://backend-production-1150.up.railway.app";
 
 document.addEventListener("DOMContentLoaded", initApp);
 function initApp(){
