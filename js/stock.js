@@ -213,6 +213,23 @@ function updateApprox() {
     const qty = Number(qtyInput.value) || 0;
     const price = getCurrentPrice();
     const total = qty * price;
+    // GET CURRENT USER
+const user = JSON.parse(localStorage.getItem("user")) || {};
+
+// CURRENT WALLET BALANCE
+const walletBalance = Number(user.walletBalance || 0);
+
+// CHECK BALANCE
+if(walletBalance < total){
+
+    alert(
+        "Insufficient Balance!\n\n" +
+        "Required: ₹" + total.toFixed(2) + "\n" +
+        "Available: ₹" + walletBalance.toFixed(2)
+    );
+
+    return;
+}
 
     reqText.innerText = "Approx req: ₹" + total.toFixed(2);
 
@@ -283,6 +300,17 @@ async function executeBuy() {
         holdingsQty += qty;
         buyMarkers.push({ price, qty });
         lastBuyAmount = total;
+
+        // UPDATE LOCAL USER DATA
+user.walletBalance = walletBalance - total;
+
+localStorage.setItem("user", JSON.stringify(user));
+
+// SUCCESS MESSAGE
+alert("Stock Purchased Successfully ✅");
+
+// REDIRECT
+window.location.href = "new-wallet.html";
 
     } catch(e){
         alert("Buy failed");
