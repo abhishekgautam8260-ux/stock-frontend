@@ -1,10 +1,7 @@
 const raw = localStorage.getItem("selectedStock");
 const stockData = raw ? JSON.parse(raw) : null;
 
-const startPrice = stockData?.price
-    ? Number(stockData.price)
-    : 500;
-
+const startPrice = stockData?.price ? Number(stockData.price) : 500;
 const API = "https://backend-production-1150.up.railway.app";
 
 let prices = [];
@@ -17,96 +14,68 @@ async function refreshUser() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch(API + "/api/user", {
-        headers: {
-            "Authorization": "Bearer " + token
-        }
+    const res = await fetch(API+"/api/user", {
+        headers: { "Authorization": "Bearer " + token }
     });
 
     const user = await res.json();
-
     localStorage.setItem("user", JSON.stringify(user));
 
-    /* PROFILE */
     const profile = document.querySelector(".profile");
+    if (profile && user.name)
+        profile.innerText = user.name.charAt(0).toUpperCase();
 
-    if (profile && user.name) {
-        profile.innerText =
-            user.name.charAt(0).toUpperCase();
-    }
-
-    /* WALLET */
-    const walletEl =
-        document.getElementById("walletAmount");
-
+    const walletEl = document.getElementById("walletAmount");
     if (walletEl) {
+            const rawBalance = Number(user.walletBalance ?? 0);
 
-        const rawBalance =
-            Number(user.walletBalance ?? 0);
-
-        walletEl.innerText =
-            rawBalance.toLocaleString("en-IN", {
+            walletEl.innerText = rawBalance.toLocaleString("en-IN", {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 1
             });
-    }
+        }
+
+function formatMoney(value){
+    if(value == null) return "0";
+
+    return Number(value)
+        .toFixed(1)        // keeps 1 decimal
+        .replace(/\.0$/,''); // removes .0 if integer
+}
 }
 
 refreshUser();
 
-/* ================= INITIAL GRAPH ================= */
+/* ================= INITIAL GRAPH DATA ================= */
 
 for (let i = 0; i < 120; i++) {
-
     const volatility = current * 0.01;
-
-    const trend =
-        Math.sin(i / 15) * volatility;
-
-    current +=
-        trend +
-        (Math.random() - 0.5) * volatility;
-
+    const trend = Math.sin(i / 15) * volatility;
+    current += trend + (Math.random() - 0.5) * volatility;
     if (current < 1) current = 1;
-
     prices.push(current);
 }
 
 /* ================= STOCK UI ================= */
 
 if (stockData && stockData.name) {
-
-    document.querySelector(".stock-header h2")
-        .innerText = stockData.name;
-
-    document.getElementById("stockPrice")
-        .innerText = "₹ " + startPrice;
-
-    document.querySelector(".trade-card h3")
-        .innerText = stockData.name;
+    document.querySelector(".stock-header h2").innerText = stockData.name;
+    document.getElementById("stockPrice").innerText = "₹ " + startPrice;
+    document.querySelector(".trade-card h3").innerText = stockData.name;
 }
 
 /* ================= CANVAS ================= */
 
-const canvas =
-    document.getElementById("stockChart");
-
+const canvas = document.getElementById("stockChart");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-
+function resizeCanvas(){
     canvas.width = canvas.offsetWidth;
-
-    canvas.height =
-        window.innerWidth < 600 ? 260 : 400;
+    canvas.height = window.innerWidth < 600 ? 260 : 400;
 }
 
 resizeCanvas();
-
-window.addEventListener(
-    "resize",
-    resizeCanvas
-);
+window.addEventListener("resize", resizeCanvas);
 
 /* ================= CONFIG ================= */
 
@@ -121,30 +90,19 @@ const CONFIG = {
 
 let buyMarkers = [];
 let mode = "BUY";
-let holdingsQty =
-    Number(localStorage.getItem("holdingsQty")) || 0;
+let holdingsQty = 0;
 
 /* ================= DOM ================= */
 
-const priceEl =
-    document.getElementById("stockPrice");
+const priceEl = document.getElementById("stockPrice");
+const qtyInput = document.getElementById("qtyInput");
+const reqText = document.getElementById("reqText");
+const balanceText = document.getElementById("balanceText");
+const tradeBtn = document.getElementById("tradeBtn");
 
-const qtyInput =
-    document.getElementById("qtyInput");
-
-const reqText =
-    document.getElementById("reqText");
-
-const balanceText =
-    document.getElementById("balanceText");
-
-const tradeBtn =
-    document.getElementById("tradeBtn");
-
-/* ================= CURRENT PRICE ================= */
+/* ================= PRICE ================= */
 
 function getCurrentPrice() {
-
     return prices[prices.length - 1];
 }
 
@@ -154,162 +112,96 @@ function drawGraph() {
 
     if (prices.length < 2) return;
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const max = Math.max(...prices);
     const min = Math.min(...prices);
-
     const range = max - min || 1;
 
     /* GRID */
-
     ctx.strokeStyle = "#eee";
     ctx.lineWidth = 1;
 
     for (let i = 0; i < 5; i++) {
-
-        let y =
-            (canvas.height / 5) * i;
-
+        let y = (canvas.height / 5) * i;
         ctx.beginPath();
-
         ctx.moveTo(0, y);
-
         ctx.lineTo(canvas.width, y);
-
         ctx.stroke();
     }
 
     /* LABELS */
-
     ctx.fillStyle = "#888";
     ctx.font = "12px Arial";
 
     for (let i = 0; i <= 4; i++) {
-
-        const value =
-            min + (range / 4) * i;
-
-        const y =
-            canvas.height -
-            (canvas.height / 4) * i;
-
-        ctx.fillText(
-            value.toFixed(2),
-            canvas.width - 50,
-            y
-        );
+        const value = min + (range / 4) * i;
+        const y = canvas.height - (canvas.height / 4) * i;
+        ctx.fillText(value.toFixed(2), canvas.width - 50, y);
     }
 
-    /* GRAPH LINE */
-
+    /* LINE */
     ctx.beginPath();
-
     ctx.strokeStyle = "#00b386";
     ctx.lineWidth = 2;
 
-    const startIndex =
-        Math.max(
-            0,
-            prices.length - CONFIG.maxPoints
-        );
-
-    const visible =
-        prices.slice(startIndex);
+    const startIndex = Math.max(0, prices.length - CONFIG.maxPoints);
+    const visible = prices.slice(startIndex);
 
     visible.forEach((price, i) => {
 
         const offset =
-            Math.max(
-                0,
-                prices.length * CONFIG.xGap -
-                canvas.width
+            Math.max(0,
+                prices.length * CONFIG.xGap - canvas.width
             );
 
-        const x =
-            i * CONFIG.xGap - offset;
+        const x = i * CONFIG.xGap - offset;
+        const y = canvas.height - ((price - min) / range) * canvas.height;
 
-        const y =
-            canvas.height -
-            ((price - min) / range)
-            * canvas.height;
-
-        if (i === 0)
-            ctx.moveTo(x, y);
-
-        else
-            ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
     });
 
     ctx.stroke();
 
-    /* BUY MARKERS */
-
+    /* BUY LINES */
     buyMarkers.forEach(marker => {
 
         const y =
             canvas.height -
-            ((marker.price - min) / range)
-            * canvas.height;
+            ((marker.price - min) / range) * canvas.height;
 
         ctx.strokeStyle = "yellow";
-
         ctx.beginPath();
-
         ctx.moveTo(0, y);
-
         ctx.lineTo(canvas.width, y);
-
         ctx.stroke();
 
         ctx.fillStyle = "#000";
-
-        ctx.fillText(
-            "BUY ₹" + marker.price.toFixed(2),
-            10,
-            y - 5
-        );
+        ctx.fillText("BUY ₹" + marker.price.toFixed(2), 10, y - 5);
     });
 }
 
-/* ================= LIVE GRAPH ================= */
+/* ================= LIVE RANDOM GRAPH ================= */
 
 setInterval(() => {
 
-    const last =
-        prices.length
-            ? prices[prices.length - 1]
-            : startPrice;
+    const last = prices.length ? prices[prices.length - 1] : startPrice;
 
-    const volatility =
-        last * 0.003;
-
-    const trend =
-        Math.sin(Date.now() / 5000)
-        * volatility;
+    const volatility = last * 0.003;
+    const trend = Math.sin(Date.now()/5000) * volatility;
 
     const newPrice =
-        last +
-        trend +
-        (Math.random() - 0.5)
-        * volatility;
+        last + trend + (Math.random()-0.5)*volatility;
 
     prices.push(newPrice);
 
-    if (prices.length > CONFIG.maxPoints) {
+    if (prices.length > CONFIG.maxPoints)
         prices.shift();
-    }
 
-    priceEl.innerText =
-        "₹ " + newPrice.toFixed(2);
+    priceEl.innerText = "₹ " + newPrice.toFixed(2);
 
     updateApprox();
-
     drawGraph();
 
 }, CONFIG.updateSpeed);
@@ -318,200 +210,82 @@ setInterval(() => {
 
 function updateApprox() {
 
-    const qty =
-        Number(qtyInput.value) || 0;
+    const qty = Number(qtyInput.value) || 0;
+    const price = getCurrentPrice();
+    const total = qty * price;
 
-    const price =
-        getCurrentPrice();
-
-    const total =
-        qty * price;
-
-    reqText.innerText =
-        "Approx req: ₹" +
-        total.toFixed(2);
+    reqText.innerText = "Approx req: ₹" + total.toFixed(2);
 
     if (mode === "BUY") {
-
         balanceText.innerText =
             lastBuyAmount !== null
-                ? "Bought at ₹" +
-                  lastBuyAmount.toFixed(2)
-                : "Buy Amount: ₹" +
-                  total.toFixed(2);
+                ? "Bought at ₹" + lastBuyAmount.toFixed(2)
+                : "Buy Amount: ₹" + total.toFixed(2);
     }
 }
 
-qtyInput.addEventListener(
-    "input",
-    updateApprox
-);
+qtyInput.addEventListener("input", updateApprox);
 
 /* ================= TAB SWITCH ================= */
 
-document.querySelectorAll(".tab")
-.forEach(tab => {
-
+document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", () => {
 
         document.querySelectorAll(".tab")
-        .forEach(t =>
-            t.classList.remove("active")
-        );
+            .forEach(t => t.classList.remove("active"));
 
         tab.classList.add("active");
-
         mode = tab.innerText.trim();
 
-        tradeBtn.innerText =
-            mode === "BUY"
-                ? "Buy"
-                : "Sell";
-
+        tradeBtn.innerText = mode === "BUY" ? "Buy" : "Sell";
         tradeBtn.style.background =
-            mode === "BUY"
-                ? "#00b386"
-                : "#ff4d4f";
+            mode === "BUY" ? "#00b386" : "#ff4d4f";
     });
 });
 
 /* ================= TRADE ================= */
 
 tradeBtn.addEventListener("click", () => {
-
-    if (mode === "BUY") {
-        executeBuy();
-    } else {
-        executeSell();
-    }
+    mode === "BUY" ? executeBuy() : executeSell();
 });
 
 /* ================= BUY ================= */
 
 async function executeBuy() {
 
-    const qty =
-        Number(qtyInput.value);
+    const qty = Number(qtyInput.value);
+    if (!qty || qty <= 0) return alert("Enter qty");
 
-    if (!qty || qty <= 0) {
-        alert("Enter qty");
-        return;
-    }
+    const price = getCurrentPrice();
+    const total = qty * price;
 
-    const price =
-        getCurrentPrice();
-
-    const total =
-        qty * price;
-
-    /* CURRENT USER */
-
-    const user =
-        JSON.parse(
-            localStorage.getItem("user")
-        ) || {};
-
-    const walletBalance =
-        Number(
-            user.walletBalance || 0
-        );
-
-    /* CHECK BALANCE */
-
-    if (walletBalance < total) {
-
-        alert(
-            "Insufficient Balance!\n\n" +
-            "Required: ₹" +
-            total.toFixed(2) +
-            "\n" +
-            "Available: ₹" +
-            walletBalance.toFixed(2)
-        );
-        
-        window.location.href =
-            "new-wallet.html";
-
-        return;
-    }
-
-    const token =
-        localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     try {
 
-        tradeBtn.disabled = true;
-
-        const res = await fetch(
-            API + "/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json",
-
-                    Authorization:
-                        `Bearer ${token}`
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
                 },
-
-                body: JSON.stringify({
-                    amount: -total
-                })
-            }
-        );
+                body: JSON.stringify({ amount:-total })
+            });
 
         const data = await res.json();
 
-        if (!res.ok)
-            throw new Error(data.message);
+        if(!res.ok) throw new Error(data.message);
 
-        /* UPDATE WALLET */
-
-        document.getElementById(
-            "walletAmount"
-        ).innerText = data.wallet;
-
-        /* UPDATE LOCAL STORAGE */
-
-        user.walletBalance =
-            walletBalance - total;
-
-        localStorage.setItem(
-            "user",
-            JSON.stringify(user)
-        );
-
-        /* HOLDINGS */
+        document.getElementById("walletAmount").innerText = data.wallet;
 
         holdingsQty += qty;
-
-// SAVE HOLDINGS
-localStorage.setItem(
-    "holdingsQty",
-    holdingsQty
-);
-
-        buyMarkers.push({
-            price,
-            qty
-        });
-
+        buyMarkers.push({ price, qty });
         lastBuyAmount = total;
 
-        /* SUCCESS */
-
-        alert(
-            "Stock Purchased Successfully ✅"
-        );
-
-    } catch (e) {
-
-        console.log(e);
-
+    } catch(e){
         alert("Buy failed");
-
-        tradeBtn.disabled = false;
     }
 }
 
@@ -568,22 +342,16 @@ async function executeSell(){
 /* ================= START ================= */
 
 function goToHome() {
-
-    window.location.href =
-        "newindex.html";
+    window.location.href = "newindex.html";
 }
-
 function toggleProfile() {
-
-    document.getElementById(
-        "profilePanel"
-    ).classList.toggle("show");
+    document.getElementById("profilePanel")
+        .classList.toggle("show");
 }
 
 function goToWallet() {
-
-    window.location.href =
-        "wallet.html";
+    window.location.href = "wallet.html";
 }
+
 
 drawGraph();
