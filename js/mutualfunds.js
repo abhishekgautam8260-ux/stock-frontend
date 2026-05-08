@@ -16,6 +16,9 @@ function goToStockPage() {
       profile.innerText = user.name.charAt(0).toUpperCase();
     }
 
+function toggleProfile() {
+  document.getElementById("profilePanel").classList.toggle("show");
+}
 
 function logout() {
     // 🧹 Remove token
