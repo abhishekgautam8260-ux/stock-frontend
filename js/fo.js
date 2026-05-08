@@ -6,6 +6,10 @@ const wallet = Number(user.walletBalance || 0);
 
 document.getElementById("walletAmount").innerText = wallet.toFixed(1);
 
+function goToStockPage() {
+  window.location.href = "stock.html";
+}
+
 /* GO HOME */
 
 function goToHome() {
