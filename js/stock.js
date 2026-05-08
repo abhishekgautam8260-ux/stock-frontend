@@ -342,6 +342,10 @@ async function executeSell() {
   refreshUser();
 }
 
+function toggleProfile() {
+  document.getElementById("profilePanel").classList.toggle("show");
+}
+
 /* ================= START ================= */
 
 function goToHome() {
