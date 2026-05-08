@@ -222,14 +222,21 @@ const walletBalance = Number(user.walletBalance || 0);
 // CHECK BALANCE
 if(walletBalance < total){
 
-    alert(
-        "Insufficient Balance!\n\n" +
-        "Required: ₹" + total.toFixed(2) + "\n" +
-        "Available: ₹" + walletBalance.toFixed(2)
-    );
+   // STOP MULTIPLE CLICKS
+tradeBtn.disabled = true;
 
-    return;
-}
+alert(
+    "Insufficient Balance!\n\n" +
+    "Required: ₹" + total.toFixed(2) + "\n" +
+    "Available: ₹" + walletBalance.toFixed(2)
+);
+
+// ENABLE AGAIN AFTER ALERT CLOSE
+setTimeout(() => {
+    tradeBtn.disabled = false;
+}, 1000);
+
+return;
 
     reqText.innerText = "Approx req: ₹" + total.toFixed(2);
 
@@ -307,6 +314,8 @@ user.walletBalance = walletBalance - total;
 localStorage.setItem("user", JSON.stringify(user));
 
 // SUCCESS MESSAGE
+tradeBtn.disabled = true;
+
 alert("Stock Purchased Successfully ✅");
 
 // REDIRECT
