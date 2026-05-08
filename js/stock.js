@@ -282,7 +282,9 @@ async function executeBuy() {
 
     if (!res.ok) throw new Error(data.message);
 
-    document.getElementById("walletAmount").innerText = data.wallet;
+    document.getElementById("walletAmount").innerText = Number(
+      data.wallet
+    ).toFixed(1);
 
     holdingsQty += qty;
     buyMarkers.push({ price, qty });
@@ -316,7 +318,9 @@ async function executeSell() {
     const data = await res.json();
     if (!res.ok) throw new Error();
 
-    document.getElementById("walletAmount").innerText = data.wallet;
+    document.getElementById("walletAmount").innerText = Number(
+      data.wallet
+    ).toFixed(1);
     holdingsQty -= qty;
     alert("Sold successfully ✅");
   } catch {
@@ -335,6 +339,7 @@ async function executeSell() {
       remaining = 0;
     }
   }
+  refreshUser();
 }
 
 /* ================= START ================= */
