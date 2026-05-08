@@ -10,6 +10,12 @@ function goToStockPage() {
   window.location.href = "stock.html";
 }
 
+ /* PROFILE LETTER */
+    const profile = document.querySelector(".profile");
+    if (profile && user.name) {
+      profile.innerText = user.name.charAt(0).toUpperCase();
+    }
+
 
 function logout() {
     // 🧹 Remove token
