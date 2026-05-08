@@ -427,6 +427,9 @@ async function executeBuy() {
             "Available: ₹" +
             walletBalance.toFixed(2)
         );
+        
+        window.location.href =
+            "new-wallet.html";
 
         return;
     }
@@ -494,9 +497,6 @@ async function executeBuy() {
         alert(
             "Stock Purchased Successfully ✅"
         );
-
-        window.location.href =
-            "new-wallet.html";
 
     } catch (e) {
 
