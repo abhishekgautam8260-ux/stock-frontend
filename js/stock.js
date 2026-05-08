@@ -121,7 +121,8 @@ const CONFIG = {
 
 let buyMarkers = [];
 let mode = "BUY";
-let holdingsQty = 0;
+let holdingsQty =
+    Number(localStorage.getItem("holdingsQty")) || 0;
 
 /* ================= DOM ================= */
 
@@ -484,6 +485,12 @@ async function executeBuy() {
         /* HOLDINGS */
 
         holdingsQty += qty;
+
+// SAVE HOLDINGS
+localStorage.setItem(
+    "holdingsQty",
+    holdingsQty
+);
 
         buyMarkers.push({
             price,
