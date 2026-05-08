@@ -145,3 +145,7 @@ function goToHome() {
 function goToFO() {
   window.location.href = "fo.html";
 }
+function goToMutualFunds(){
+    window.location.href =
+        "mutualfunds.html";
+}
