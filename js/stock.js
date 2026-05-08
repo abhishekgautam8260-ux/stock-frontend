@@ -11,37 +11,36 @@ let lastBuyAmount = null;
 /* ================= USER LOAD ================= */
 
 async function refreshUser() {
+  const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
+  const res = await fetch(API + "/api/user", {
+    headers: { Authorization: "Bearer " + token },
+  });
 
-    const res = await fetch(API+"/api/user", {
-        headers: { "Authorization": "Bearer " + token }
+  const user = await res.json();
+  localStorage.setItem("user", JSON.stringify(user));
+
+  const profile = document.querySelector(".profile");
+  if (profile && user.name)
+    profile.innerText = user.name.charAt(0).toUpperCase();
+
+  const walletEl = document.getElementById("walletAmount");
+  if (walletEl) {
+    const rawBalance = Number(user.walletBalance ?? 0);
+
+    walletEl.innerText = rawBalance.toLocaleString("en-IN", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
     });
+  }
 
-    const user = await res.json();
-    localStorage.setItem("user", JSON.stringify(user));
-
-    const profile = document.querySelector(".profile");
-    if (profile && user.name)
-        profile.innerText = user.name.charAt(0).toUpperCase();
-
-    const walletEl = document.getElementById("walletAmount");
-    if (walletEl) {
-            const rawBalance = Number(user.walletBalance ?? 0);
-
-            walletEl.innerText = rawBalance.toLocaleString("en-IN", {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 1
-            });
-        }
-
-function formatMoney(value){
-    if(value == null) return "0";
+  function formatMoney(value) {
+    if (value == null) return "0";
 
     return Number(value)
-        .toFixed(1)        // keeps 1 decimal
-        .replace(/\.0$/,''); // removes .0 if integer
-}
+      .toFixed(1) // keeps 1 decimal
+      .replace(/\.0$/, ""); // removes .0 if integer
+  }
 }
 
 refreshUser();
@@ -49,19 +48,19 @@ refreshUser();
 /* ================= INITIAL GRAPH DATA ================= */
 
 for (let i = 0; i < 120; i++) {
-    const volatility = current * 0.01;
-    const trend = Math.sin(i / 15) * volatility;
-    current += trend + (Math.random() - 0.5) * volatility;
-    if (current < 1) current = 1;
-    prices.push(current);
+  const volatility = current * 0.01;
+  const trend = Math.sin(i / 15) * volatility;
+  current += trend + (Math.random() - 0.5) * volatility;
+  if (current < 1) current = 1;
+  prices.push(current);
 }
 
 /* ================= STOCK UI ================= */
 
 if (stockData && stockData.name) {
-    document.querySelector(".stock-header h2").innerText = stockData.name;
-    document.getElementById("stockPrice").innerText = "₹ " + startPrice;
-    document.querySelector(".trade-card h3").innerText = stockData.name;
+  document.querySelector(".stock-header h2").innerText = stockData.name;
+  document.getElementById("stockPrice").innerText = "₹ " + startPrice;
+  document.querySelector(".trade-card h3").innerText = stockData.name;
 }
 
 /* ================= CANVAS ================= */
@@ -69,9 +68,9 @@ if (stockData && stockData.name) {
 const canvas = document.getElementById("stockChart");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas(){
-    canvas.width = canvas.offsetWidth;
-    canvas.height = window.innerWidth < 600 ? 260 : 400;
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = window.innerWidth < 600 ? 260 : 400;
 }
 
 resizeCanvas();
@@ -80,10 +79,10 @@ window.addEventListener("resize", resizeCanvas);
 /* ================= CONFIG ================= */
 
 const CONFIG = {
-    maxPoints: 180,
-    xGap: 5,
-    minPrice: 15,
-    updateSpeed: 800
+  maxPoints: 180,
+  xGap: 5,
+  minPrice: 15,
+  updateSpeed: 800,
 };
 
 /* ================= STATE ================= */
@@ -103,255 +102,252 @@ const tradeBtn = document.getElementById("tradeBtn");
 /* ================= PRICE ================= */
 
 function getCurrentPrice() {
-    return prices[prices.length - 1];
+  return prices[prices.length - 1];
 }
 
 /* ================= DRAW GRAPH ================= */
 
 function drawGraph() {
+  if (prices.length < 2) return;
 
-    if (prices.length < 2) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const max = Math.max(...prices);
+  const min = Math.min(...prices);
+  const range = max - min || 1;
 
-    const max = Math.max(...prices);
-    const min = Math.min(...prices);
-    const range = max - min || 1;
+  /* GRID */
+  ctx.strokeStyle = "#eee";
+  ctx.lineWidth = 1;
 
-    /* GRID */
-    ctx.strokeStyle = "#eee";
-    ctx.lineWidth = 1;
-
-    for (let i = 0; i < 5; i++) {
-        let y = (canvas.height / 5) * i;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-    }
-
-    /* LABELS */
-    ctx.fillStyle = "#888";
-    ctx.font = "12px Arial";
-
-    for (let i = 0; i <= 4; i++) {
-        const value = min + (range / 4) * i;
-        const y = canvas.height - (canvas.height / 4) * i;
-        ctx.fillText(value.toFixed(2), canvas.width - 50, y);
-    }
-
-    /* LINE */
+  for (let i = 0; i < 5; i++) {
+    let y = (canvas.height / 5) * i;
     ctx.beginPath();
-    ctx.strokeStyle = "#00b386";
-    ctx.lineWidth = 2;
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
 
-    const startIndex = Math.max(0, prices.length - CONFIG.maxPoints);
-    const visible = prices.slice(startIndex);
+  /* LABELS */
+  ctx.fillStyle = "#888";
+  ctx.font = "12px Arial";
 
-    visible.forEach((price, i) => {
+  for (let i = 0; i <= 4; i++) {
+    const value = min + (range / 4) * i;
+    const y = canvas.height - (canvas.height / 4) * i;
+    ctx.fillText(value.toFixed(2), canvas.width - 50, y);
+  }
 
-        const offset =
-            Math.max(0,
-                prices.length * CONFIG.xGap - canvas.width
-            );
+  /* LINE */
+  ctx.beginPath();
+  ctx.strokeStyle = "#00b386";
+  ctx.lineWidth = 2;
 
-        const x = i * CONFIG.xGap - offset;
-        const y = canvas.height - ((price - min) / range) * canvas.height;
+  const startIndex = Math.max(0, prices.length - CONFIG.maxPoints);
+  const visible = prices.slice(startIndex);
 
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-    });
+  visible.forEach((price, i) => {
+    const offset = Math.max(0, prices.length * CONFIG.xGap - canvas.width);
 
+    const x = i * CONFIG.xGap - offset;
+    const y = canvas.height - ((price - min) / range) * canvas.height;
+
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+
+  ctx.stroke();
+
+  /* BUY LINES */
+  buyMarkers.forEach((marker) => {
+    const y = canvas.height - ((marker.price - min) / range) * canvas.height;
+
+    ctx.strokeStyle = "yellow";
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
     ctx.stroke();
 
-    /* BUY LINES */
-    buyMarkers.forEach(marker => {
-
-        const y =
-            canvas.height -
-            ((marker.price - min) / range) * canvas.height;
-
-        ctx.strokeStyle = "yellow";
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-
-        ctx.fillStyle = "#000";
-        ctx.fillText("BUY ₹" + marker.price.toFixed(2), 10, y - 5);
-    });
+    ctx.fillStyle = "#000";
+    ctx.fillText("BUY ₹" + marker.price.toFixed(2), 10, y - 5);
+  });
 }
 
 /* ================= LIVE RANDOM GRAPH ================= */
 
 setInterval(() => {
+  const last = prices.length ? prices[prices.length - 1] : startPrice;
 
-    const last = prices.length ? prices[prices.length - 1] : startPrice;
+  const volatility = last * 0.003;
+  const trend = Math.sin(Date.now() / 5000) * volatility;
 
-    const volatility = last * 0.003;
-    const trend = Math.sin(Date.now()/5000) * volatility;
+  const newPrice = last + trend + (Math.random() - 0.5) * volatility;
 
-    const newPrice =
-        last + trend + (Math.random()-0.5)*volatility;
+  prices.push(newPrice);
 
-    prices.push(newPrice);
+  if (prices.length > CONFIG.maxPoints) prices.shift();
 
-    if (prices.length > CONFIG.maxPoints)
-        prices.shift();
+  priceEl.innerText = "₹ " + newPrice.toFixed(2);
 
-    priceEl.innerText = "₹ " + newPrice.toFixed(2);
-
-    updateApprox();
-    drawGraph();
-
+  updateApprox();
+  drawGraph();
 }, CONFIG.updateSpeed);
 
 /* ================= APPROX ================= */
 
 function updateApprox() {
+  const qty = Number(qtyInput.value) || 0;
+  const price = getCurrentPrice();
+  const total = qty * price;
 
-    const qty = Number(qtyInput.value) || 0;
-    const price = getCurrentPrice();
-    const total = qty * price;
+  reqText.innerText = "Approx req: ₹" + total.toFixed(2);
 
-    reqText.innerText = "Approx req: ₹" + total.toFixed(2);
-
-    if (mode === "BUY") {
-        balanceText.innerText =
-            lastBuyAmount !== null
-                ? "Bought at ₹" + lastBuyAmount.toFixed(2)
-                : "Buy Amount: ₹" + total.toFixed(2);
-    }
+  if (mode === "BUY") {
+    balanceText.innerText =
+      lastBuyAmount !== null
+        ? "Bought at ₹" + lastBuyAmount.toFixed(2)
+        : "Buy Amount: ₹" + total.toFixed(2);
+  }
 }
 
 qtyInput.addEventListener("input", updateApprox);
 
 /* ================= TAB SWITCH ================= */
 
-document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", () => {
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document
+      .querySelectorAll(".tab")
+      .forEach((t) => t.classList.remove("active"));
 
-        document.querySelectorAll(".tab")
-            .forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    mode = tab.innerText.trim();
 
-        tab.classList.add("active");
-        mode = tab.innerText.trim();
-
-        tradeBtn.innerText = mode === "BUY" ? "Buy" : "Sell";
-        tradeBtn.style.background =
-            mode === "BUY" ? "#00b386" : "#ff4d4f";
-    });
+    tradeBtn.innerText = mode === "BUY" ? "Buy" : "Sell";
+    tradeBtn.style.background = mode === "BUY" ? "#00b386" : "#ff4d4f";
+  });
 });
 
 /* ================= TRADE ================= */
 
 tradeBtn.addEventListener("click", () => {
-    mode === "BUY" ? executeBuy() : executeSell();
+  mode === "BUY" ? executeBuy() : executeSell();
 });
 
 /* ================= BUY ================= */
 
 async function executeBuy() {
+  const qty = Number(qtyInput.value);
+  if (!qty || qty <= 0) return alert("Enter qty");
 
-    const qty = Number(qtyInput.value);
-    if (!qty || qty <= 0) return alert("Enter qty");
+  const price = getCurrentPrice();
+  const total = qty * price;
 
-    const price = getCurrentPrice();
-    const total = qty * price;
+  const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
+  /* CURRENT USER */
 
-    try {
+  const user = JSON.parse(localStorage.getItem("user")) || {};
 
-        const res = await fetch(API +
-            "/api/user/wallet/update",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    Authorization:`Bearer ${token}`
-                },
-                body: JSON.stringify({ amount:-total })
-            });
+  const walletBalance = Number(user.walletBalance || 0);
 
-        const data = await res.json();
+  /* CHECK BALANCE */
 
-        if(!res.ok) throw new Error(data.message);
+  if (walletBalance < total) {
+    alert(
+      "Insufficient Balance!\n\n" +
+        "Required: ₹" +
+        total.toFixed(2) +
+        "\n" +
+        "Available: ₹" +
+        walletBalance.toFixed(2)
+    );
 
-        document.getElementById("walletAmount").innerText = data.wallet;
+    window.location.href = "new-wallet.html";
 
-        holdingsQty += qty;
-        buyMarkers.push({ price, qty });
-        lastBuyAmount = total;
+    return;
+  }
 
-    } catch(e){
-        alert("Buy failed");
-    }
+  try {
+    const res = await fetch(API + "/api/user/wallet/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: -total }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    document.getElementById("walletAmount").innerText = data.wallet;
+
+    holdingsQty += qty;
+    buyMarkers.push({ price, qty });
+    lastBuyAmount = total;
+  } catch (e) {
+    alert("Buy failed");
+  }
 }
 
 /* ================= SELL ================= */
 
-async function executeSell(){
+async function executeSell() {
+  const qty = Number(qtyInput.value);
+  if (!qty || qty <= 0) return alert("Enter valid Qty");
+  if (qty > holdingsQty) return alert("Not enough shares");
 
-    const qty = Number(qtyInput.value);
-    if(!qty || qty<=0) return alert("Enter valid Qty");
-    if(qty>holdingsQty) return alert("Not enough shares");
+  const sellPrice = getCurrentPrice();
+  const totalSellValue = qty * sellPrice;
+  const token = localStorage.getItem("token");
 
-    const sellPrice = getCurrentPrice();
-    const totalSellValue = qty * sellPrice;
-    const token = localStorage.getItem("token");
+  try {
+    const res = await fetch(API + "/api/user/wallet/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: totalSellValue }),
+    });
 
-    try{
+    const data = await res.json();
+    if (!res.ok) throw new Error();
 
-        const res = await fetch(API +
-            "/api/user/wallet/update",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    Authorization:`Bearer ${token}`
-                },
-                body: JSON.stringify({ amount: totalSellValue })
-            });
+    document.getElementById("walletAmount").innerText = data.wallet;
+    holdingsQty -= qty;
+    alert("Sold successfully ✅");
+  } catch {
+    alert("Sell failed");
+  }
 
-        const data = await res.json();
-        if(!res.ok) throw new Error();
-
-        document.getElementById("walletAmount").innerText = data.wallet;
-        holdingsQty -= qty;
-        alert("Sold successfully ✅");
-
-    }catch{
-        alert("Sell failed");
+  /* remove markers */
+  let remaining = qty;
+  while (remaining > 0 && buyMarkers.length > 0) {
+    const last = buyMarkers[buyMarkers.length - 1];
+    if (last.qty <= remaining) {
+      remaining -= last.qty;
+      buyMarkers.pop();
+    } else {
+      last.qty -= remaining;
+      remaining = 0;
     }
-
-    /* remove markers */
-    let remaining = qty;
-    while(remaining>0 && buyMarkers.length>0){
-        const last = buyMarkers[buyMarkers.length-1];
-        if(last.qty<=remaining){
-            remaining-=last.qty;
-            buyMarkers.pop();
-        }else{
-            last.qty-=remaining;
-            remaining=0;
-        }
-    }
+  }
 }
 
 /* ================= START ================= */
 
 function goToHome() {
-    window.location.href = "newindex.html";
+  window.location.href = "newindex.html";
 }
 function toggleProfile() {
-    document.getElementById("profilePanel")
-        .classList.toggle("show");
+  document.getElementById("profilePanel").classList.toggle("show");
 }
 
 function goToWallet() {
-    window.location.href = "wallet.html";
+  window.location.href = "wallet.html";
 }
-
 
 drawGraph();
