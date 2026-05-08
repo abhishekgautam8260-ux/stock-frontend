@@ -142,3 +142,6 @@ function goToWallet() {
 function goToHome() {
     window.location.href = "newindex.html";
 }
+function goToFO() {
+  window.location.href = "fo.html";
+}
