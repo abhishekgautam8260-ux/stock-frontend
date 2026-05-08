@@ -299,7 +299,7 @@
     align-items: center;
     gap: 15px;
 
-    width: 280px;
+    width: 80px;
     padding: 18px 22px;
 
     border-radius: 60px;
@@ -364,7 +364,7 @@
 @media(max-width:600px){
 
     .float-btn{
-        width: 230px;
+        width: 80px;
         font-size: 16px;
         padding: 14px 18px;
     }
