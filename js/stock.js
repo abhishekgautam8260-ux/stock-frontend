@@ -517,92 +517,50 @@ localStorage.setItem(
 
 /* ================= SELL ================= */
 
-async function executeSell() {
+async function executeSell(){
 
-    const qty =
-        Number(qtyInput.value);
+    const qty = Number(qtyInput.value);
+    if(!qty || qty<=0) return alert("Enter valid Qty");
+    if(qty>holdingsQty) return alert("Not enough shares");
 
-    if (!qty || qty <= 0) {
-        return alert("Enter valid Qty");
-    }
+    const sellPrice = getCurrentPrice();
+    const totalSellValue = qty * sellPrice;
+    const token = localStorage.getItem("token");
 
-    if (qty > holdingsQty) {
-        return alert("Not enough shares");
-    }
+    try{
 
-    const sellPrice =
-        getCurrentPrice();
-
-    const totalSellValue =
-        qty * sellPrice;
-
-    const token =
-        localStorage.getItem("token");
-
-    try {
-
-        const res = await fetch(
-            API + "/api/user/wallet/update",
+        const res = await fetch(API +
+            "/api/user/wallet/update",
             {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json",
-
-                    Authorization:
-                        `Bearer ${token}`
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
                 },
-
-                body: JSON.stringify({
-                    amount: totalSellValue
-                })
-            }
-        );
+                body: JSON.stringify({ amount: totalSellValue })
+            });
 
         const data = await res.json();
+        if(!res.ok) throw new Error();
 
-        if (!res.ok)
-            throw new Error();
-
-        document.getElementById(
-            "walletAmount"
-        ).innerText = data.wallet;
-
+        document.getElementById("walletAmount").innerText = data.wallet;
         holdingsQty -= qty;
-
         alert("Sold successfully ✅");
 
-    } catch {
-
+    }catch{
         alert("Sell failed");
     }
 
-    /* REMOVE MARKERS */
-
+    /* remove markers */
     let remaining = qty;
-
-    while (
-        remaining > 0 &&
-        buyMarkers.length > 0
-    ) {
-
-        const last =
-            buyMarkers[
-                buyMarkers.length - 1
-            ];
-
-        if (last.qty <= remaining) {
-
-            remaining -= last.qty;
-
+    while(remaining>0 && buyMarkers.length>0){
+        const last = buyMarkers[buyMarkers.length-1];
+        if(last.qty<=remaining){
+            remaining-=last.qty;
             buyMarkers.pop();
-
-        } else {
-
-            last.qty -= remaining;
-
-            remaining = 0;
+        }else{
+            last.qty-=remaining;
+            remaining=0;
         }
     }
 }
